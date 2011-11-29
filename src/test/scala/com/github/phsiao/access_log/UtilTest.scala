@@ -14,24 +14,24 @@ class UtilTest extends FunSuite with ShouldMatchers {
     nonempty should be ("1234")
   }
 
-  test("directive_b") {
-    val Util.directive_b(zero) = "-"
+  test("format_b") {
+    val Util.format_b(zero) = "-"
     zero should be (0)
 
-    val Util.directive_b(num) = "123"
+    val Util.format_b(num) = "123"
     num should be (123)
   }
 
-  test("directive_s") {
-    val Util.directive_s(ok) = "200"
+  test("format_s") {
+    val Util.format_s(ok) = "200"
     ok should be (200)
 
-    val Util.directive_s(notfound) = "404"
+    val Util.format_s(notfound) = "404"
     notfound should be (404)
   }
 
-  test("directive_t") {
-    val Util.directive_t(ts) = "28/Nov/2011:22:21:46 -0500"
+  test("format_t") {
+    val Util.format_t(ts) = "28/Nov/2011:22:21:46 -0500"
     ts should be (1322536906)
   }
 }

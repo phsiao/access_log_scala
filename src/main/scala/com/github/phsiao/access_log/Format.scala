@@ -12,7 +12,7 @@ object common {
   val le = """(.+) (.+) (.+) \[(.+)\] "(.*)" (\d+) ([-\d]+)""".r
   def unapply(line: String) = {
     val le(clf_string(hostname), clf_string(identity), clf_string(userid),
-           directive_t(timestamp), request, directive_s(status), directive_b(size)) = line
+           format_t(timestamp), request, format_s(status), format_b(size)) = line
     Some(hostname, identity, userid, timestamp, request, status, size)
   }
 }
@@ -27,7 +27,7 @@ object combined {
   val le = """(.+) (.+) (.+) \[(.+)\] "(.*)" (\d+) ([-\d]+) "(.*)" "(.*)"""".r
   def unapply(line: String) = {
     val le(clf_string(hostname), clf_string(identity), clf_string(userid),
-           directive_t(timestamp), request, directive_s(status), directive_b(size),
+           format_t(timestamp), request, format_s(status), format_b(size),
            referrer, useragent) = line
     Some(hostname, identity, userid, timestamp, request, status, size, referrer, useragent)
   }
