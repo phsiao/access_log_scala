@@ -22,6 +22,14 @@ class UtilTest extends FunSuite with ShouldMatchers {
     num should be (123)
   }
 
+  test("directive_s") {
+    val Util.directive_s(ok) = "200"
+    ok should be (200)
+
+    val Util.directive_s(notfound) = "404"
+    notfound should be (404)
+  }
+
   test("directive_t") {
     val Util.directive_t(ts) = "28/Nov/2011:22:21:46 -0500"
     ts should be (1322536906)

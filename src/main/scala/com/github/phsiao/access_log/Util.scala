@@ -25,6 +25,14 @@ object directive_b {
   }
 }
 
+/** Parse directive %s as Integer
+  */
+object directive_s {
+  def unapply(s: String): Option[Int] = {
+    Some(s.toInt)
+  }
+}
+
 /** Parse directive %t as Integer, seconds since Unix epoch
   */
 object directive_t {
