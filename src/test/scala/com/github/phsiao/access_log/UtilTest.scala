@@ -6,6 +6,14 @@ import com.github.phsiao.access_log.Util
 
 class UtilTest extends FunSuite with ShouldMatchers {
 
+  test("clf_string") {
+    val Util.clf_string(empty) = "-"
+    empty should be ("")
+
+    val Util.clf_string(nonempty) = "1234"
+    nonempty should be ("1234")
+  }
+
   test("directive_b") {
     val Util.directive_b(zero) = "-"
     zero should be (0)

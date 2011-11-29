@@ -7,6 +7,15 @@ import java.text.SimpleDateFormat
   * http://httpd.apache.org/docs/2.2/mod/mod_log_config.html#formats
   */
 
+/** Parse String as CLF string, i.e., "-" indicates missing data
+  */
+object clf_string {
+  def unapply(s: String): Option[String] = {
+    if (s == "-") Some("")
+    else Some(s)
+  }
+}
+
 /** Parse directive %b as Integer
   */
 object directive_b {
@@ -25,3 +34,4 @@ object directive_t {
     Some((directive_t_format.parse(s).getTime()/1000).toInt)
   }
 }
+
