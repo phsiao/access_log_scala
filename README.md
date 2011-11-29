@@ -24,5 +24,8 @@ request: String = GET /apache_pb.gif HTTP/1.0
 status: Int = 200
 size: Int = 2326
 
+scala> val common_as_map(entry) = """127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326"""
+entry: scala.collection.immutable.ListMap[String,Any] = Map(REMOTEHOST -> 127.0.0.1, IDENTITY -> "", USERID -> frank, TIMESTAMP -> 971211336, REQUEST -> GET /apache_pb.gif HTTP/1.0, STATUS -> 200, SIZE -> 2326)
+
 scala> 
 ```
