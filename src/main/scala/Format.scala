@@ -1,19 +1,6 @@
 package com.github.phsiao.access_log.Format
 
 import com.github.phsiao.access_log.Util._
-import scala.collection.immutable.ListMap
-
-object field {
-  val REMOTEHOST  = "REMOTEHOST"
-  val IDENTITY    = "IDENTITY"
-  val USERID      = "USERID"
-  val TIMESTAMP   = "TIMESTAMP"
-  val REQUEST     = "REQUEST"
-  val STATUS      = "STATUS"
-  val SIZE        = "SIZE"
-  val REFERRER    = "REFERRER"
-  val USERAGENT   = "USERAGENT"
-}
 
 class common(val remotehost: String, val identity: String, val userid: String,
              val timestamp: Int, val request: String, val status: Int, val size: Int) {

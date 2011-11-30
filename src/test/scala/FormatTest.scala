@@ -3,7 +3,6 @@ package com.github.phsiao.access_log.Format.test
 import org.scalatest.FunSuite
 import org.scalatest.matchers.ShouldMatchers
 import com.github.phsiao.access_log.Format._
-import com.github.phsiao.access_log.Format.field._
 
 class FormatTest extends FunSuite with ShouldMatchers {
 
