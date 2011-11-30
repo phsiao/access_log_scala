@@ -15,6 +15,15 @@ object field {
   val USERAGENT   = "USERAGENT"
 }
 
+class common(val remotehost: String, val identity: String, val userid: String,
+             val timestamp: Int, val request: String, val status: Int, val size: Int) {
+  override def toString() = {
+    val fmt = """common(remotehost="%s", identity="%s", userid="%s", timestamp=%d, """ +
+              """request="%s", status=%d, size=%d)"""
+    fmt.format(remotehost, identity, userid, timestamp, request, status, size)
+  }
+}
+
 /** Parse Apache common log format
   *
   * http://httpd.apache.org/docs/2.2/logs.html#common
@@ -26,17 +35,18 @@ object common {
   def unapply(line: String) = {
     val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
            format_t(timestamp), request, format_s(status), format_b(size)) = line
-    Some(remotehost, identity, userid, timestamp, request, status, size)
+    Some(new common(remotehost, identity, userid, timestamp, request, status, size))
   }
 }
 
-object common_as_map {
-  def unapply(line: String) = {
-    val common(remotehost, identity, userid, timestamp, request, status, size) = line
-    import field._
-    Some(ListMap[String, Any](REMOTEHOST -> remotehost, IDENTITY -> identity, USERID -> userid,
-                 TIMESTAMP -> timestamp, REQUEST -> request,
-                 STATUS -> status, SIZE -> size))
+class combined(val remotehost: String, val identity: String, val userid: String,
+               val timestamp: Int, val request: String, val status: Int, val size: Int,
+               val referrer: String, val useragent: String) {
+  override def toString() = {
+    val fmt = """combined(remotehost="%s", identity="%s", userid="%s", timestamp=%d, """ +
+              """request="%s", status=%d, size=%d, referrer="%s" useragent="%s")"""
+    fmt.format(remotehost, identity, userid, timestamp, request, status, size,
+               referrer, useragent)
   }
 }
 
@@ -52,18 +62,7 @@ object combined {
     val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
            format_t(timestamp), request, format_s(status), format_b(size),
            referrer, useragent) = line
-    Some(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent)
+    Some(new combined(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent))
   }
 }
 
-object combined_as_map {
-  def unapply(line: String) = {
-    val combined(remotehost, identity, userid, timestamp, request,
-                 status, size, referrer, useragent) = line
-    import field._
-    Some(ListMap[String, Any](REMOTEHOST -> remotehost, IDENTITY -> identity, USERID -> userid,
-                 TIMESTAMP -> timestamp, REQUEST -> request,
-                 STATUS -> status, SIZE -> size,
-                 REFERRER -> referrer, USERAGENT -> useragent))
-  }
-}
