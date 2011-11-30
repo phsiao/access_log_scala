@@ -19,6 +19,19 @@ class FormatTest extends FunSuite with ShouldMatchers {
     entry.size should be (2326)
   }
 
+  test("common bad example 1") {
+    val common(entry) =
+      """127.0.0.1 - fr ank [10/Oct/2000:13:55:36 -0700] "GET /apa"che_pb.gif HTTP/1.0" 200 2326"""
+
+    if (entry.identity == "") {
+      entry.userid should be ("fr ank")
+    } else {
+      entry.userid should be ("ank")
+    }
+
+    entry.request should be ("GET /apa\"che_pb.gif HTTP/1.0")
+  }
+
   test("combined simple example") {
     val combined(entry) =
       """127.0.0.1 - frank [10/Oct/2000:13:55:36 -0700] "GET /apache_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)""""
@@ -34,4 +47,16 @@ class FormatTest extends FunSuite with ShouldMatchers {
     entry.useragent should be ("Mozilla/4.08 [en] (Win98; I ;Nav)")
   }
 
+  test("combined bad example 1") {
+    val combined(entry) =
+      """127.0.0.1 - fr ank [10/Oct/2000:13:55:36 -0700] "GET /apa"che_pb.gif HTTP/1.0" 200 2326 "http://www.example.com/start.html" "Mozilla/4.08 [en] (Win98; I ;Nav)""""
+
+    if (entry.identity == "") {
+      entry.userid should be ("fr ank")
+    } else {
+      entry.userid should be ("ank")
+    }
+
+    entry.request should be ("GET /apa\"che_pb.gif HTTP/1.0")
+  }
 }

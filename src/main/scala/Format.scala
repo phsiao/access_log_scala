@@ -18,11 +18,21 @@ class common(val remotehost: String, val identity: String, val userid: String,
   * LogFormat "%h %l %u %t \"%r\" %>s %b " common
   */
 object common {
-  val le = """(.+) (.+) (.+) \[(.+)\] "(.*)" (\d+) ([-\d]+)""".r
+  val aggressive_negated_le = """([^ ]+) ([^ ]+) ([^ ]+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+)""".r
+  val le = """([^ ]+) (.+) (.+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+)""".r
   def unapply(line: String) = {
-    val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
-           format_t(timestamp), request, format_s(status), format_b(size)) = line
-    Some(new common(remotehost, identity, userid, timestamp, request, status, size))
+    try {
+      val aggressive_negated_le(clf_string(remotehost), clf_string(identity), clf_string(userid),
+                                format_t(timestamp), request, format_s(status), format_b(size)) = line
+      Some(new common(remotehost, identity, userid, timestamp, request, status, size))
+    } catch {
+      case m: scala.MatchError => {
+        val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
+                                format_t(timestamp), request, format_s(status), format_b(size)) = line
+        Some(new common(remotehost, identity, userid, timestamp, request, status, size))
+      }
+      case e => throw e
+    }
   }
 }
 
@@ -44,7 +54,8 @@ class combined(val remotehost: String, val identity: String, val userid: String,
   * LogFormat "%h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined
   */
 object combined {
-  val le = """(.+) (.+) (.+) \[(.+)\] "(.*)" (\d+) ([-\d]+) "(.*)" "(.*)"""".r
+  val aggressive_negated_le = """([^ ]+) ([^ ]+) ([^ ]+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+) "([^"]*)" "([^"]*)"""".r
+  val le = """([^ ]+) (.+) (.+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+) "(.*)" "(.*)"""".r
   def unapply(line: String) = {
     val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
            format_t(timestamp), request, format_s(status), format_b(size),
@@ -52,4 +63,3 @@ object combined {
     Some(new combined(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent))
   }
 }
-
