@@ -57,9 +57,19 @@ object combined {
   val aggressive_negated_le = """([^ ]+) ([^ ]+) ([^ ]+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+) "([^"]*)" "([^"]*)"""".r
   val le = """([^ ]+) (.+) (.+) \[([^\]]+)\] "(.*)" (\d+) ([-\d]+) "(.*)" "(.*)"""".r
   def unapply(line: String) = {
-    val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
-           format_t(timestamp), request, format_s(status), format_b(size),
-           referrer, useragent) = line
-    Some(new combined(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent))
+    try {
+      val aggressive_negated_le(clf_string(remotehost), clf_string(identity), clf_string(userid),
+                                format_t(timestamp), request, format_s(status), format_b(size),
+                                referrer, useragent) = line
+      Some(new combined(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent))
+    } catch {
+      case m: scala.MatchError => {
+        val le(clf_string(remotehost), clf_string(identity), clf_string(userid),
+             format_t(timestamp), request, format_s(status), format_b(size),
+             referrer, useragent) = line
+        Some(new combined(remotehost, identity, userid, timestamp, request, status, size, referrer, useragent))
+      }
+      case e => throw e
+    }
   }
 }
